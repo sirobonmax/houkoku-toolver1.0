@@ -28,7 +28,6 @@
 
     <div class="section">
         <h3 id="display-date">報告内容</h3>
-        
         <div id="main-items"></div>
     </div>
 
@@ -61,15 +60,15 @@
             { id: 'kikan', name: '機種変更' },
             { id: 'hikari', name: '楽天ひかり' },
             { id: 'turbo', name: 'Turbo' },
-            { id: 'card', name: 'カード' },
-            { id: 'nw_opt', name: 'NWオプション' },
-            { id: 'iphone', name: 'iPhone販売数' }
+            { id: 'card', name: 'カード' }
         ],
         sub: [
+            { id: 'nw_opt', name: 'NWオプション' },
+            { id: 'iphone', name: 'iPhone販売数', unit: '台' },
             { id: 'adguard', name: 'ADGUARD' },
-            { id: 'kodomamo', name: 'こどマモ' },
-            { id: 'pedal', name: 'あんしんペダル' },
-            { id: 'easy', name: 'イイジー' },
+            { id: 'aosbox', name: 'AOS Box' },
+            { id: 'kodomamo', name: 'コドマモ' },
+            { id: 'simpletap', name: 'SIMPLE TAP イージー' },
             { id: 'oppo', name: 'OPPO充電器販売' }
         ],
         visitor: [
@@ -83,10 +82,10 @@
         ]
     };
 
-    // 日付のセット
+    // 日付のセット（〇〇〇〇店は必要に応じて書き換えてください）
     const now = new Date();
-    const dateStr = `【${now.getMonth() + 1}月${now.getDate()}日させぼ五番街店】`;
-    document.getElementById('display-date').innerText = dateStr;
+    const dateHeader = `【${now.getMonth() + 1}月${now.getDate()}日　させぼ五番街店】`;
+    document.getElementById('display-date').innerText = dateHeader;
 
     // HTML生成
     function createItems(items, containerId) {
@@ -122,21 +121,21 @@
     window.copyReport = function() {
         const getVal = (id) => document.getElementById(id).value || 0;
         
-        let report = `${dateStr}\n\n`;
+        let report = `${dateHeader}\n`;
         
         config.main.forEach(item => {
-            const unit = item.name.includes('販売数') ? '台' : '件';
-            report += `${item.name}　　 ${getVal(item.id)}${unit}\n`;
+            report += `${item.name}　 ${getVal(item.id)}件\n`;
         });
         
         report += `\n`;
         config.sub.forEach(item => {
-            report += `${item.name}　　${getVal(item.id)}件\n`;
+            const unit = item.unit || '件';
+            report += `${item.name}　 ${getVal(item.id)}${unit}\n`;
         });
 
         report += `\n`;
         config.visitor.forEach(item => {
-            report += `${item.name}　　　${getVal(item.id)}${item.unit}\n`;
+            report += `${item.name}　 ${getVal(item.id)}${item.unit}\n`;
         });
 
         report += `\n＊楽天ひかり申込内訳\n`;
