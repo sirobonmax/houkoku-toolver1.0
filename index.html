@@ -32,7 +32,7 @@
     </div>
 
     <div class="section">
-        <h3>サードパーティ / 備品</h3>
+        <h3>付帯 / オプション</h3>
         <div id="sub-items"></div>
     </div>
 
@@ -63,10 +63,11 @@
             { id: 'card', name: 'カード' }
         ],
         sub: [
-            { id: 'nw_opt', name: 'NWオプション' },
+            { id: 'nw_opt', name: 'NWオプション', unit: '台' },
             { id: 'iphone', name: 'iPhone販売数', unit: '台' },
             { id: 'adguard', name: 'ADGUARD' },
             { id: 'aosbox', name: 'AOS Box' },
+            { id: 'pika', name: 'ピカプロDX' },
             { id: 'kodomamo', name: 'コドマモ' },
             { id: 'simpletap', name: 'SIMPLE TAP イージー' },
             { id: 'oppo', name: 'OPPO充電器販売' }
@@ -82,7 +83,7 @@
         ]
     };
 
-    // 日付のセット（〇〇〇〇店は必要に応じて書き換えてください）
+    // 日付のセット
     const now = new Date();
     const dateHeader = `【${now.getMonth() + 1}月${now.getDate()}日　させぼ五番街店】`;
     document.getElementById('display-date').innerText = dateHeader;
@@ -140,16 +141,23 @@
 
         report += `\n＊楽天ひかり申込内訳\n`;
         config.hikari_detail.forEach(item => {
-            report += `${item.name}　　${getVal(item.id)}件\n`;
+            report += `${item.name}　　 ${getVal(item.id)}件\n`;
         });
 
         const textarea = document.getElementById('report_text');
         textarea.value = report;
         textarea.style.display = 'block';
         textarea.select();
-        document.execCommand('copy');
         
-        alert("コピーしました！\nそのまま貼り付けられます。");
+        // クリップボードAPIを優先的に使用
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(report).then(() => {
+                alert("コピーしました！\nそのまま貼り付けられます。");
+            });
+        } else {
+            document.execCommand('copy');
+            alert("コピーしました！\nそのまま貼り付けられます。");
+        }
     };
 </script>
 </body>
